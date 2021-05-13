@@ -1,0 +1,76 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: filestorage-requests
+  labels:
+    name: filestorage-requests
+spec:
+  ports:
+    - nodePort: 30002
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: filestorage-requests
+  type: NodePort
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: filestorage-requests
+spec:
+  selector:
+    matchLabels:
+      app: filestorage-requests
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: filestorage-requests
+    spec:
+      containers:
+        - name: filestorage-requests
+          image: localhost:5000/dev/filestorage-requests
+          ports:
+            - containerPort: 8080
+          env:   # Setting Enviornmental Variables
+            - name: DB_HOST   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: db-conf  # name of configMap
+                  key: host
+            - name: DB_NAME  # Setting Database name from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: db-conf
+                  key: name
+            - name: DB_USERNAME  # Setting Database username from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials # Secret Name
+                  key: username
+            - name: DB_PASSWORD # Setting Database password from Secret
+              valueFrom:
+                secretKeyRef:
+                  name: db-credentials
+                  key: password
+            - name: MINIO_BUCKET
+              value: 00000qweqwe
+            - name: MINIO_HOST 
+              valueFrom:
+                configMapKeyRef:
+                  name: minio-conf
+                  key: host
+            - name: MINIO_KEY 
+              valueFrom:
+                configMapKeyRef:
+                  name: minio-conf
+                  key: key
+            - name: MINIO_PASS
+              valueFrom:
+                configMapKeyRef:
+                  name: minio-conf
+                  key: secret
+
+

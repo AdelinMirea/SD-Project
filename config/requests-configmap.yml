@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: requests-conf
+data:
+  host: filestorage-requests
+  port: "8080"

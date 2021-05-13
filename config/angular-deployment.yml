@@ -1,0 +1,57 @@
+apiVersion: apps/v1 # For versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata: # Data that helps  uniquely identify the object (using name, UID and namespace)
+  name: filestorage-web
+spec: # What state you desire for the object
+  selector: # The selector field defines how the deployment finds which pod to manage
+    matchLabels:
+      app: filestorage-web
+  replicas: 1  # Tells the deployment to run 3 pods matching the template
+  template:
+    metadata:
+      labels: # Labels are used as indentifying attributes for objects such as pods and replication controller.
+        app: filestorage-web
+    spec:
+      containers:
+        - name: filestorage-web
+          image: localhost:5000/dev/filestorage-web
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env: # Setting Enviornmental Variables
+            - name: LOGIN_HOST   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: users-conf  # name of configMap
+                  key: host
+            - name: LOGIN_PORT   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: users-conf  # name of configMap
+                  key: port
+            - name: REQUESTS_HOST   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: requests-conf  # name of configMap
+                  key: host
+            - name: REQUESTS_PORT   # Setting Database host address from configMap
+              valueFrom:
+                configMapKeyRef:
+                  name: requests-conf  # name of configMap
+                  key: port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: filestorage-web
+  labels:
+    name: filestorage-web
+spec:
+  ports:
+    - nodePort: 30100 # make the service available to network requests from external clients
+      port: 80        # access the service via external port no
+      targetPort: 80  # port number that container listening on
+      protocol: TCP
+  selector:
+    app: filestorage-web
+  type: LoadBalancer     # which expose the application on a port across a each of your nodes
