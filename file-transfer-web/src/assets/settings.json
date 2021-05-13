@@ -1,0 +1,6 @@
+{
+  "loginHost": "http://localhost",
+  "loginPort": "5000",
+  "requestHost": "http://localhost",
+  "requestPort": "5000"
+}

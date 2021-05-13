@@ -1,0 +1,37 @@
+<div style="padding: 20px">
+  <div style="padding-bottom: 20px">
+    <div class="row">
+      <div class="col">
+        <h1>File Storage</h1>
+      </div>
+      <div class="col-2">
+        <button class="btn btn-light" (click)="logout()">Log out</button>
+      </div>
+    </div>
+  </div>
+  <div>
+    <input type="file" style="display: none" id="fileInput" (change)="handleFileInput($event)">
+    <button class="btn btn-outline-info" (click)="goParentDir()"> < Back </button>
+    <button class="btn btn-outline-info" (click)="uploadFile()"> < Upload </button>
+  </div>
+  <div class="container row">
+    <div class="col row">
+      <div *ngFor="let file of files"
+           style="margin: 20px; padding: 20px; height: 200px; width: 150px; background-color: aliceblue; cursor:pointer;"
+           (click)="showDetails(file)"
+      (dblclick)="navigateOrDownload(file)">
+        <div style="overflow: auto">{{file.name}}</div>
+        <button class="btn btn-outline-success" style="right: 0" (click)="downloadFile(file)">Download</button>
+      </div>
+    </div>
+
+    <div class="col-3" style="background-color: #d4d4d4; height: 400px; overflow: auto; padding: 20px">
+      <h4>Details:</h4>
+      <div *ngIf="selectedFile.id != -1">
+        File name: {{selectedFile.name}}
+        <br>
+        Size: {{selectedFile.size}}
+      </div>
+    </div>
+  </div>
+</div>

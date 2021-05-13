@@ -1,0 +1,6 @@
+{
+  "loginHost": "${LOGIN_HOST}",
+  "loginPort": "${LOGIN_PORT}",
+  "requestHost": "${REQUESTS_HOST}",
+  "requestPort": "${REQUESTS_PORT}"
+}

@@ -1,0 +1,7 @@
+
+<div class="container-fluid" style="margin: 100px; width: 400px; background-color: aliceblue; padding: 40px; border-radius: 20px; box-shadow: darkgrey 5px 5px 10px">
+  <input placeholder="Email" class="form-control" style="margin: 10px" [(ngModel)]="email" (keydown.enter)="login()">
+  <input placeholder="Password" type="password" class="form-control" style="margin: 10px" [(ngModel)]="password" (keydown.enter)="login()">
+  <button class="btn btn-info" style="margin: 10px" (click)="login()">Login</button>
+  <button class="btn btn-info" style="margin: 10px" (click)="signUp()">Sign Up</button>
+</div>
